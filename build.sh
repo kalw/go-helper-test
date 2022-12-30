@@ -30,4 +30,5 @@ EOF
     go mod init ${CMD_NAME}
     go get github.com/mumoshu/variant/cmd
     goreleaser release --snapshot -f ${DIR_ROOT}/.goreleaser.${CMD_NAME}.yaml
+    cd ${DIR_ROOT}
 done
