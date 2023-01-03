@@ -1,4 +1,6 @@
 go install github.com/mumoshu/variant@v0.38.0
+go install github.com/goreleaser/goreleaser@latest
+og install 
 DIR_ROOT=${PWD}
 for file in $(ls ./*-wrapper); do 
     CMD_NAME=$(basename $file | sed -e 's/-wrapper//')
