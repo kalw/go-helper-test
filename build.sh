@@ -1,7 +1,7 @@
 go install github.com/mumoshu/variant@v0.38.0
 DIR_ROOT=${PWD}
-for file in $(ls ./*.yaml); do 
-    CMD_NAME=$(basename $file | sed -e 's/.yaml//')
+for file in $(ls ./*-wrapper); do 
+    CMD_NAME=$(basename $file | sed -e 's/-wrapper//')
     mkdir -p ./tmp/cmd/${CMD_NAME}
 	cat << EOF > ./tmp/cmd/${CMD_NAME}/main.go
 package main
