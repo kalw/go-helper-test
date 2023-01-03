@@ -1,0 +1,72 @@
+#!/usr/bin/env variant
+
+tasks:
+  tests:
+    tasks:
+      report:
+        description: "execute allure report generation"
+        script: |
+          echo allure generate allure-results --clean
+      run:
+        description: "execute tests"
+        inputs:
+        - name: exec_run_client
+          type: string
+          default: "*"
+          description: "the client name"
+        - name: exec_run_project
+          type: string
+          default: "*"
+          description: "the project name"
+        - name: exec_run_testname
+          type: string
+          default: "*"
+          description: "name of the test"
+        script: |
+          for test in $(find {{.exec_run_client}}/{{.exec_run_project}}/enabled/ -name '{{.exec_run_testname}}.js')
+          do
+            echo create tmp dir
+            echo inject code and create injected file in temp dir
+          done
+          echo wdio run -c config --spec /tmp/dir/{{.exec_run_client}}/{{.exec_run_project}}/enabled/{{.exec_run_testname}}.js
+      disable:
+        description: "disable one test"
+        inputs:
+        - name: exec_dis_testname
+          type: string
+          default: "none.js"
+          description: "name of the test"
+        script: |
+          if [ "{{.exec_dis_testname}}" == "none.js" ]; then
+            echo need filename argument
+            exit 1 
+          fi
+          TEST_PATH=$(find test -name {{.exec_dis_testname}} | head -n 1)
+          TEST_DIR=$(dirname $TEST_PATH)
+          cd $TEST_DIR
+          echo mv {{.exec_dis_testname}} ../diabled/
+
+  screenshot:
+    tasks:
+      override:
+        description: "override the baseline screenshot"
+        inputs:
+            - name: scr_testname
+              type: string
+              default: "none.js"
+              description: "name of the test"
+        script: |
+          if [ "{{.scr_testname}}" == "none.js" ]; then
+            echo need filename argument
+            exit 1 
+          fi
+          for baseline in $(find {{.exec_run_client}}/{{.exec_run_project}}/baseline/ -name '{{.exec_run_testname}}.png')
+          do
+            baseline_path=$(dirname $baseline)
+            baseline_file_name=$(basename ${baseline})
+            baseline_file_name_new=$(echo ${baseline} | sed -e 's/\.png//')
+            mv $baseline ${baseline_path}/${baseline_file_name_new}
+          done
+          echo override the baseline screenshot for {{.scr_testname}}
+          echo moved $baseline to ${baseline_path}/${baseline_file_name_new}
+          
