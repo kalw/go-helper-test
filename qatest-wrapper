@@ -2,6 +2,7 @@
 
 tasks:
   tests:
+    description: "command related to tests. see tests help"
     tasks:
       report:
         description: "execute allure report generation"
@@ -47,6 +48,7 @@ tasks:
           echo mv {{.exec_dis_testname}} ../diabled/
 
   screenshot:
+    description: "command related screenhots. see screenshot help"
     tasks:
       override:
         description: "override the baseline screenshot"
