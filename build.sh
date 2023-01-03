@@ -1,4 +1,4 @@
-go install github.com/mumoshu/variant/cmd@v0.38.0
+go install github.com/mumoshu/variant@v0.38.0
 DIR_ROOT=${PWD}
 for file in $(ls ./*.yaml); do 
     CMD_NAME=$(basename $file | sed -e 's/.yaml//')
@@ -25,10 +25,11 @@ builds:
       - windows
       - darwin
       - freebsd
+project_name: ${CMD_NAME}
 EOF
     cd ./tmp/cmd/${CMD_NAME}/ 
     go mod init ${CMD_NAME}
     go get github.com/mumoshu/variant/cmd
-    goreleaser release --snapshot -f ${DIR_ROOT}/.goreleaser.${CMD_NAME}.yaml
+    goreleaser release -f ${DIR_ROOT}/.goreleaser.${CMD_NAME}.yaml
     cd ${DIR_ROOT}
 done
